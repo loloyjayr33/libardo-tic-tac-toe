@@ -148,7 +148,7 @@ function Game() {
             aiTimeoutRef.current = null;
         }
 
-    if (!vsComputer || !modeChosen) return; // Not in vs-computer mode or mode not chosen yet
+        if (!vsComputer || !modeChosen) return; // Not in vs-computer mode or mode not chosen yet
         const current = history[stepNumber];
         const squares = current.squares.slice();
         if (calculateWinner(squares)) return; // Game already won
