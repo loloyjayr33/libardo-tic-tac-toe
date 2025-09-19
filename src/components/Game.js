@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Board from './Board';
 
 function Game() {
@@ -7,6 +7,10 @@ function Game() {
     }]);
     const [stepNumber, setStepNumber] = useState(0);
     const [xIsNext, setXIsNext] = useState(true);
+    const [vsComputer, setVsComputer] = useState(false); // Computer plays as 'O'
+    const aiTimeoutRef = useRef(null);
+    const [showWinModal, setShowWinModal] = useState(false);
+    const lastWinnerRef = useRef(null);
 
     const handleClick = (i) => {
         const currentHistory = history.slice(0, stepNumber + 1);
@@ -15,6 +19,11 @@ function Game() {
 
         // Return early if someone has won or the square is already filled
         if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
+
+        // Prevent human from playing on computer's turn
+        if (vsComputer && !xIsNext) {
             return;
         }
 
@@ -55,6 +64,60 @@ function Game() {
         status = 'Next player: ' + (xIsNext ? 'X' : 'O');
     }
 
+    // Open modal when a new winner is detected
+    useEffect(() => {
+        if (winner && lastWinnerRef.current !== winner) {
+            setShowWinModal(true);
+            lastWinnerRef.current = winner;
+        }
+        if (!winner) {
+            lastWinnerRef.current = null;
+            setShowWinModal(false);
+        }
+    }, [winner]);
+
+    // Auto-play computer move (computer is 'O')
+    useEffect(() => {
+        // Clear any pending AI move when dependencies change
+        if (aiTimeoutRef.current) {
+            clearTimeout(aiTimeoutRef.current);
+            aiTimeoutRef.current = null;
+        }
+
+        if (!vsComputer) return; // Not in vs-computer mode
+        const current = history[stepNumber];
+        const squares = current.squares.slice();
+        if (calculateWinner(squares)) return; // Game already won
+
+        const emptyLeft = squares.some((sq) => sq === null);
+        if (!emptyLeft) return; // Draw / no moves left
+
+        // Computer plays when it's O's turn (i.e., not X's turn)
+        if (!xIsNext) {
+            aiTimeoutRef.current = setTimeout(() => {
+                const move = getBestMove(squares, 'O');
+                if (move != null) {
+                    const currentHistory = history.slice(0, stepNumber + 1);
+                    const current = currentHistory[currentHistory.length - 1];
+                    const nextSquares = current.squares.slice();
+                    // If cell already filled (rare race), bail
+                    if (nextSquares[move]) return;
+                    nextSquares[move] = 'O';
+                    setHistory(currentHistory.concat([{ squares: nextSquares }]));
+                    setStepNumber(currentHistory.length);
+                    setXIsNext(true);
+                }
+            }, 300);
+        }
+
+        return () => {
+            if (aiTimeoutRef.current) {
+                clearTimeout(aiTimeoutRef.current);
+                aiTimeoutRef.current = null;
+            }
+        };
+    }, [history, stepNumber, xIsNext, vsComputer]);
+
     return (
         <div className="game">
             <div className="game-board">
@@ -64,9 +127,28 @@ function Game() {
                 />
             </div>
             <div className="game-info">
+                <div style={{ marginBottom: 8 }}>
+                    <button onClick={() => setVsComputer((v) => !v)}>
+                        {vsComputer ? 'Playing vs Computer (O)' : 'Play vs Computer'}
+                    </button>
+                </div>
                 <div>{status}</div>
                 <ol>{moves}</ol>
             </div>
+
+            {showWinModal && winner && (
+                <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Game result">
+                    <div className="modal-card">
+                        <h2 style={{ marginTop: 0 }}>Winner</h2>
+                        <p style={{ fontSize: 18, margin: '8px 0 16px' }}>
+                            {winner} wins!
+                        </p>
+                        <div className="modal-actions">
+                            <button onClick={() => setShowWinModal(false)}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }
@@ -90,6 +172,61 @@ function calculateWinner(squares) {
             return squares[a];
         }
     }
+    return null;
+}
+
+// Simple AI: try to win, block, take center, corner, then side.
+function getBestMove(squares, ai) {
+    const human = ai === 'X' ? 'O' : 'X';
+    const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6],
+    ];
+
+    // Helper to test a move
+    const checkWin = (board, player) => {
+        for (let [a, b, c] of lines) {
+            if (board[a] === player && board[b] === player && board[c] === player) {
+                return true;
+            }
+        }
+        return false;
+    };
+
+    const empties = [];
+    for (let i = 0; i < 9; i++) if (!squares[i]) empties.push(i);
+
+    // 1) Win if possible
+    for (let i of empties) {
+        const copy = squares.slice();
+        copy[i] = ai;
+        if (checkWin(copy, ai)) return i;
+    }
+
+    // 2) Block if human can win
+    for (let i of empties) {
+        const copy = squares.slice();
+        copy[i] = human;
+        if (checkWin(copy, human)) return i;
+    }
+
+    // 3) Take center
+    if (empties.includes(4)) return 4;
+
+    // 4) Take a corner
+    const corners = [0, 2, 6, 8].filter((i) => empties.includes(i));
+    if (corners.length) return corners[Math.floor(Math.random() * corners.length)];
+
+    // 5) Take a side
+    const sides = [1, 3, 5, 7].filter((i) => empties.includes(i));
+    if (sides.length) return sides[Math.floor(Math.random() * sides.length)];
+
     return null;
 }
 
