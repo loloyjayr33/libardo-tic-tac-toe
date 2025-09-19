@@ -14,6 +14,24 @@ function Game() {
     const [showDrawModal, setShowDrawModal] = useState(false);
     const drawShownRef = useRef(false);
 
+    // Scoreboard state with localStorage persistence
+    const [xWins, setXWins] = useState(() => {
+        const v = Number(window.localStorage.getItem('xWins'));
+        return Number.isFinite(v) ? v : 0;
+    });
+    const [oWins, setOWins] = useState(() => {
+        const v = Number(window.localStorage.getItem('oWins'));
+        return Number.isFinite(v) ? v : 0;
+    });
+
+    useEffect(() => {
+        window.localStorage.setItem('xWins', String(xWins));
+    }, [xWins]);
+
+    useEffect(() => {
+        window.localStorage.setItem('oWins', String(oWins));
+    }, [oWins]);
+
     const resetBoard = () => {
         // cancel any pending AI
         if (aiTimeoutRef.current) {
@@ -90,6 +108,9 @@ function Game() {
     useEffect(() => {
         if (winner && lastWinnerRef.current !== winner) {
             setShowWinModal(true);
+            // Increment scoreboard once at the moment a new winner is detected
+            if (winner === 'X') setXWins((c) => c + 1);
+            if (winner === 'O') setOWins((c) => c + 1);
             lastWinnerRef.current = winner;
         }
         if (!winner) {
@@ -171,6 +192,16 @@ function Game() {
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
                     <button onClick={resetBoard}>Reset</button>
                     <button onClick={newGame}>New Game</button>
+                </div>
+                <div className="scoreboard">
+                    <div className="score score-x" aria-label="X wins">
+                        <span>X</span>
+                        <strong>{xWins}</strong>
+                    </div>
+                    <div className="score score-o" aria-label="O wins">
+                        <span>O</span>
+                        <strong>{oWins}</strong>
+                    </div>
                 </div>
                 <div>{status}</div>
                 <ol>{moves}</ol>
