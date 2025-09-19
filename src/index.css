@@ -1,13 +1,53 @@
+:root {
+  /* Theme */
+  --bg: #0f172a;
+  /* slate-900 */
+  --bg-soft: #111827;
+  /* gray-900 */
+  --panel: #0b1220;
+  /* dark panel */
+  --muted: #9ca3af;
+  /* gray-400 */
+  --text: #e5e7eb;
+  /* gray-200 */
+  --accent: #61dafb;
+  /* React blue */
+  --accent-strong: #3cc4ee;
+  --border: rgba(255, 255, 255, 0.14);
+
+  /* Layout */
+  --radius: 14px;
+  --radius-sm: 10px;
+  --shadow-1: 0 10px 25px rgba(0, 0, 0, 0.35), 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-2: 0 6px 16px rgba(0, 0, 0, 0.35);
+
+  /* Board sizing */
+  --cell-size: clamp(72px, 18vmin, 110px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--text);
+  background:
+    radial-gradient(1000px 500px at 10% 10%, rgba(14, 165, 233, 0.28), transparent 45%),
+    radial-gradient(900px 450px at 90% 90%, rgba(167, 139, 250, 0.25), transparent 45%),
+    linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
