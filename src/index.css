@@ -1,11 +1,17 @@
 :root {
   /* Theme */
-  --bg: #0f172a; /* slate-900 */
-  --bg-soft: #111827; /* gray-900 */
-  --panel: #0b1220; /* dark panel */
-  --muted: #9ca3af; /* gray-400 */
-  --text: #e5e7eb; /* gray-200 */
-  --accent: #61dafb; /* React blue */
+  --bg: #0f172a;
+  /* slate-900 */
+  --bg-soft: #111827;
+  /* gray-900 */
+  --panel: #0b1220;
+  /* dark panel */
+  --muted: #9ca3af;
+  /* gray-400 */
+  --text: #e5e7eb;
+  /* gray-200 */
+  --accent: #61dafb;
+  /* React blue */
   --accent-strong: #3cc4ee;
   --border: rgba(255, 255, 255, 0.14);
 
