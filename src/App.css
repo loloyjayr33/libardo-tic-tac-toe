@@ -54,7 +54,7 @@
 .game-info>div:first-child {
   font-weight: 700;
   letter-spacing: 0.2px;
-  color: #f9fafb;
+  color: var(--text);
   margin-bottom: 10px;
 }
 
@@ -111,8 +111,41 @@
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  color: #e5e7eb;
+  color: var(--text);
   cursor: pointer;
+
+/* Light theme: ensure popup has strong contrast and readable text */
+[data-theme="light"] .modal-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  /* Softer shadow for light surfaces */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+  backdrop-filter: none;
+}
+
+/* Light theme modal text: darker shades for clarity */
+[data-theme="light"] .modal-card h2 {
+  color: #111827; /* gray-900 */
+  font-weight: 600; /* slightly lighter than default h2 bold */
+}
+
+[data-theme="light"] .modal-card p {
+  color: #374151; /* gray-700 */
+}
+
+/* Light theme modal buttons: light surface with dark text */
+[data-theme="light"] .modal-actions button {
+  background: #eef2f7; /* light surface */
+  color: #111827; /* dark text */
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .modal-actions button:hover {
+  background: #e5e7eb;
+  border-color: rgba(37, 99, 235, 0.4); /* blue-600 outline tint */
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
   transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   user-select: none;
   display: grid;
@@ -253,4 +286,48 @@
 
 .theme-icon {
   display: inline-flex;
+}
+
+/* --- Light mode popup readability overrides (end of file for precedence) --- */
+html[data-theme="light"] .modal-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="light"] .modal-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+  color: #111827;
+  backdrop-filter: none;
+}
+
+/* Force all modal text to dark for absolute clarity in light mode */
+html[data-theme="light"] .modal-card, 
+html[data-theme="light"] .modal-card * {
+  color: #111827 !important;
+}
+
+html[data-theme="light"] .modal-card h2 {
+  color: #111827;
+  text-shadow: none;
+  font-size: 1.35rem;
+}
+
+html[data-theme="light"] .modal-card p {
+  color: #374151;
+  font-size: 1rem;
+}
+
+html[data-theme="light"] .modal-actions button {
+  background: #eef2f7;
+  color: #111827;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 1px 6px rgba(0, 0, 0, 0.08);
+  text-shadow: none;
+}
+
+html[data-theme="light"] .modal-actions button:hover {
+  background: #e5e7eb;
+  border-color: rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
