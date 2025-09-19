@@ -219,3 +219,38 @@
   color: #fbbf24;
   /* amber-400 */
 }
+
+/* Theme toggle */
+.theme-toggle {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--button-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.theme-btn:hover {
+  background: var(--button-hover-bg);
+  border-color: rgba(97, 218, 251, 0.5);
+  box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.15);
+}
+
+.theme-btn.active {
+  outline: 2px solid rgba(97, 218, 251, 0.35);
+}
+
+.theme-icon {
+  display: inline-flex;
+}
