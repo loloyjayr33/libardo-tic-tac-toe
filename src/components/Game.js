@@ -11,6 +11,28 @@ function Game() {
     const aiTimeoutRef = useRef(null);
     const [showWinModal, setShowWinModal] = useState(false);
     const lastWinnerRef = useRef(null);
+    const [showDrawModal, setShowDrawModal] = useState(false);
+    const drawShownRef = useRef(false);
+
+    const resetBoard = () => {
+        // cancel any pending AI
+        if (aiTimeoutRef.current) {
+            clearTimeout(aiTimeoutRef.current);
+            aiTimeoutRef.current = null;
+        }
+        setHistory([{ squares: Array(9).fill(null) }]);
+        setStepNumber(0);
+        setXIsNext(true);
+        setShowWinModal(false);
+        setShowDrawModal(false);
+        lastWinnerRef.current = null;
+    };
+
+    const newGame = () => {
+        resetBoard();
+        // Return to default mode (player vs player)
+        setVsComputer(false);
+    };
 
     const handleClick = (i) => {
         const currentHistory = history.slice(0, stepNumber + 1);
@@ -58,7 +80,7 @@ function Game() {
     let status;
     if (winner) {
         status = 'Winner: ' + winner;
-    } else if (stepNumber === 9) {
+    } else if (!winner && history[stepNumber].squares.every((sq) => sq !== null)) {
         status = 'Game ended in a draw!';
     } else {
         status = 'Next player: ' + (xIsNext ? 'X' : 'O');
@@ -75,6 +97,20 @@ function Game() {
             setShowWinModal(false);
         }
     }, [winner]);
+
+    // Show draw modal when board is full and there's no winner
+    useEffect(() => {
+        const current = history[stepNumber];
+        const isDraw = !winner && current.squares.every((sq) => sq !== null);
+        if (isDraw && !drawShownRef.current) {
+            setShowDrawModal(true);
+            drawShownRef.current = true;
+        }
+        if (!isDraw) {
+            setShowDrawModal(false);
+            drawShownRef.current = false;
+        }
+    }, [history, stepNumber, winner]);
 
     // Auto-play computer move (computer is 'O')
     useEffect(() => {
@@ -132,6 +168,10 @@ function Game() {
                         {vsComputer ? 'Playing vs Computer (O)' : 'Play vs Computer'}
                     </button>
                 </div>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+                    <button onClick={resetBoard}>Reset</button>
+                    <button onClick={newGame}>New Game</button>
+                </div>
                 <div>{status}</div>
                 <ol>{moves}</ol>
             </div>
@@ -145,6 +185,21 @@ function Game() {
                         </p>
                         <div className="modal-actions">
                             <button onClick={() => setShowWinModal(false)}>Close</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {showDrawModal && !winner && (
+                <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Game result">
+                    <div className="modal-card">
+                        <h2 style={{ marginTop: 0 }}>Draw</h2>
+                        <p style={{ fontSize: 18, margin: '8px 0 16px' }}>
+                            It's a tie. No more moves left.
+                        </p>
+                        <div className="modal-actions" style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                            <button onClick={() => setShowDrawModal(false)}>Close</button>
+                            <button onClick={resetBoard}>Play Again</button>
                         </div>
                     </div>
                 </div>
