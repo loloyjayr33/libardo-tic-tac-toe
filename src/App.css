@@ -18,7 +18,7 @@
   font-weight: 800;
   letter-spacing: 0.4px;
   font-size: clamp(28px, 4.5vw, 48px);
-  background: linear-gradient(90deg, #e5e7eb 0%, #61dafb 40%, #a78bfa 100%);
+  background: var(--heading-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -71,7 +71,7 @@
 }
 
 .game-info button {
-  background: #111827;
+  background: var(--button-bg);
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 14px;
@@ -84,7 +84,7 @@
 }
 
 .game-info button:hover {
-  background: #0f172a;
+  background: var(--button-hover-bg);
   border-color: rgba(97, 218, 251, 0.5);
   box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.15);
 }
@@ -100,7 +100,7 @@
 
 .square {
   appearance: none;
-  background: linear-gradient(180deg, #0f172a, #0b1220);
+  background: linear-gradient(180deg, var(--square-bg-start), var(--square-bg-end));
   border: 1px solid var(--border);
   float: left;
   font-size: calc(var(--cell-size) * 0.5);
@@ -121,7 +121,7 @@
 }
 
 .square:hover {
-  background: linear-gradient(180deg, #111827, #0f172a);
+  background: linear-gradient(180deg, var(--square-hover-bg-start), var(--square-hover-bg-end));
   border-color: rgba(97, 218, 251, 0.5);
   box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.15);
 }
