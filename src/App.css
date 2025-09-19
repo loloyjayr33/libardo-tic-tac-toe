@@ -18,7 +18,7 @@
   font-weight: 800;
   letter-spacing: 0.4px;
   font-size: clamp(28px, 4.5vw, 48px);
-  background: linear-gradient(90deg, #e5e7eb 0%, #61dafb 40%, #a78bfa 100%);
+  background: var(--heading-gradient);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -54,7 +54,7 @@
 .game-info>div:first-child {
   font-weight: 700;
   letter-spacing: 0.2px;
-  color: #f9fafb;
+  color: var(--text);
   margin-bottom: 10px;
 }
 
@@ -71,7 +71,7 @@
 }
 
 .game-info button {
-  background: #111827;
+  background: var(--button-bg);
   border: 1px solid var(--border);
   color: var(--text);
   font-size: 14px;
@@ -84,7 +84,7 @@
 }
 
 .game-info button:hover {
-  background: #0f172a;
+  background: var(--button-hover-bg);
   border-color: rgba(97, 218, 251, 0.5);
   box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.15);
 }
@@ -100,7 +100,7 @@
 
 .square {
   appearance: none;
-  background: linear-gradient(180deg, #0f172a, #0b1220);
+  background: linear-gradient(180deg, var(--square-bg-start), var(--square-bg-end));
   border: 1px solid var(--border);
   float: left;
   font-size: calc(var(--cell-size) * 0.5);
@@ -111,7 +111,7 @@
   margin-top: -1px;
   padding: 0;
   text-align: center;
-  color: #e5e7eb;
+  color: var(--text);
   cursor: pointer;
   transition: background 0.2s ease, transform 0.1s ease, box-shadow 0.2s ease, color 0.2s ease, border-color 0.2s ease;
   user-select: none;
@@ -121,7 +121,7 @@
 }
 
 .square:hover {
-  background: linear-gradient(180deg, #111827, #0f172a);
+  background: linear-gradient(180deg, var(--square-hover-bg-start), var(--square-hover-bg-end));
   border-color: rgba(97, 218, 251, 0.5);
   box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.15);
 }
@@ -218,4 +218,105 @@
 .score-o span {
   color: #fbbf24;
   /* amber-400 */
+}
+
+/* Light theme: make scoreboard tiles readable */
+html[data-theme="light"] .score {
+  background: #ffffff; /* white tile */
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.8) inset, 0 1px 6px rgba(0, 0, 0, 0.08);
+}
+
+html[data-theme="light"] .score span,
+html[data-theme="light"] .score strong {
+  color: #111827; /* dark text for readability */
+  text-shadow: none;
+}
+
+/* Keep X/O accent colors but ensure contrast against light background */
+html[data-theme="light"] .score-x span {
+  color: #1d4ed8; /* blue-700 for stronger contrast */
+}
+
+html[data-theme="light"] .score-o span {
+  color: #b45309; /* amber-700 for stronger contrast */
+}
+
+/* Theme toggle */
+.theme-toggle {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--button-bg);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 6px 10px;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.theme-btn:hover {
+  background: var(--button-hover-bg);
+  border-color: rgba(97, 218, 251, 0.5);
+  box-shadow: 0 0 0 3px rgba(97, 218, 251, 0.15);
+}
+
+.theme-btn.active {
+  outline: 2px solid rgba(97, 218, 251, 0.35);
+}
+
+.theme-icon {
+  display: inline-flex;
+}
+
+/* --- Light mode popup readability overrides (end of file for precedence) --- */
+html[data-theme="light"] .modal-backdrop {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+html[data-theme="light"] .modal-card {
+  background: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.08);
+  color: #111827;
+  backdrop-filter: none;
+}
+
+/* Force all modal text to dark for absolute clarity in light mode */
+html[data-theme="light"] .modal-card, 
+html[data-theme="light"] .modal-card * {
+  color: #111827 !important;
+}
+
+html[data-theme="light"] .modal-card h2 {
+  color: #111827;
+  text-shadow: none;
+  font-size: 1.35rem;
+}
+
+html[data-theme="light"] .modal-card p {
+  color: #374151;
+  font-size: 1rem;
+}
+
+html[data-theme="light"] .modal-actions button {
+  background: #eef2f7;
+  color: #111827;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 1px 6px rgba(0, 0, 0, 0.08);
+  text-shadow: none;
+}
+
+html[data-theme="light"] .modal-actions button:hover {
+  background: #e5e7eb;
+  border-color: rgba(37, 99, 235, 0.4);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
 }
