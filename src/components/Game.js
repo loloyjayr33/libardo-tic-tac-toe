@@ -8,6 +8,7 @@ function Game() {
     const [stepNumber, setStepNumber] = useState(0);
     const [xIsNext, setXIsNext] = useState(true);
     const [vsComputer, setVsComputer] = useState(false); // Computer plays as 'O'
+    const [modeChosen, setModeChosen] = useState(false);
     const aiTimeoutRef = useRef(null);
     const [showWinModal, setShowWinModal] = useState(false);
     const lastWinnerRef = useRef(null);
@@ -48,7 +49,8 @@ function Game() {
 
     const newGame = () => {
         resetBoard();
-        // Return to default mode (player vs player)
+        // Prompt mode selection again before next round
+        setModeChosen(false);
         setVsComputer(false);
     };
 
@@ -59,6 +61,11 @@ function Game() {
 
         // Return early if someone has won or the square is already filled
         if (calculateWinner(squares) || squares[i]) {
+            return;
+        }
+
+        // Block moves until mode is chosen
+        if (!modeChosen) {
             return;
         }
 
@@ -141,7 +148,7 @@ function Game() {
             aiTimeoutRef.current = null;
         }
 
-        if (!vsComputer) return; // Not in vs-computer mode
+    if (!vsComputer || !modeChosen) return; // Not in vs-computer mode or mode not chosen yet
         const current = history[stepNumber];
         const squares = current.squares.slice();
         if (calculateWinner(squares)) return; // Game already won
@@ -173,7 +180,7 @@ function Game() {
                 aiTimeoutRef.current = null;
             }
         };
-    }, [history, stepNumber, xIsNext, vsComputer]);
+    }, [history, stepNumber, xIsNext, vsComputer, modeChosen]);
 
     return (
         <div className="game">
@@ -184,10 +191,9 @@ function Game() {
                 />
             </div>
             <div className="game-info">
-                <div style={{ marginBottom: 8 }}>
-                    <button onClick={() => setVsComputer((v) => !v)}>
-                        {vsComputer ? 'Playing vs Computer (O)' : 'Play vs Computer'}
-                    </button>
+                <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
+                    <button onClick={() => { setVsComputer(false); setModeChosen(true); }}>2 Players</button>
+                    <button onClick={() => { setVsComputer(true); setModeChosen(true); }}>Vs Computer</button>
                 </div>
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 8 }}>
                     <button onClick={resetBoard}>Reset</button>
@@ -231,6 +237,19 @@ function Game() {
                         <div className="modal-actions" style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
                             <button onClick={() => setShowDrawModal(false)}>Close</button>
                             <button onClick={resetBoard}>Play Again</button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {!modeChosen && (
+                <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Choose mode">
+                    <div className="modal-card">
+                        <h2 style={{ marginTop: 0 }}>Choose Mode</h2>
+                        <p style={{ margin: '8px 0 16px' }}>Select how you want to play:</p>
+                        <div className="modal-actions" style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+                            <button onClick={() => { setVsComputer(false); setModeChosen(true); }}>2 Players</button>
+                            <button onClick={() => { setVsComputer(true); setModeChosen(true); }}>Vs Computer</button>
                         </div>
                     </div>
                 </div>
