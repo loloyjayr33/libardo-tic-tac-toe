@@ -1,0 +1,74 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+/* Game styles */
+.game {
+  display: flex;
+  flex-direction: row;
+  margin-top: 20px;
+}
+
+.game-info {
+  margin-left: 20px;
+  color: white;
+}
+
+.game-info ol {
+  padding-inline-start: 20px;
+}
+
+.game-info button {
+  background: #4e5766;
+  border: 1px solid #999;
+  color: white;
+  font-size: 16px;
+  margin: 4px;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.game-info button:hover {
+  background: #61dafb;
+  color: #282c34;
+}
+
+/* Board styles */
+.board-row {
+  display: flex;
+}
+
+.square {
+  background: #4e5766;
+  border: 1px solid #999;
+  float: left;
+  font-size: 36px;
+  font-weight: bold;
+  line-height: 60px;
+  height: 80px;
+  width: 80px;
+  margin-right: -1px;
+  margin-top: -1px;
+  padding: 0;
+  text-align: center;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.square:hover {
+  background: #61dafb;
+  color: #282c34;
+}
